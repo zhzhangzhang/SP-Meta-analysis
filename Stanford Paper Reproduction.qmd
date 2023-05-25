@@ -1,0 +1,79 @@
+---
+title: "Stanford Paper Reproduction"
+format: html
+author: "Shuyi Song"
+editor: visual
+---
+
+```{r config}
+library(config)
+
+config <- config::get()
+
+config$path$rawdata
+```
+
+Table 1
+
+![](images/Screenshot%202023-05-25%20at%2020.07.58-01.png){fig-align="left"}
+
+Table 2
+
+![](images/Screenshot%202023-05-25%20at%2020.08.14.png){fig-align="left"}
+
+Table 3 (two version)
+
+Standard: whether contains repeated provider
+
+*Repeated provider table (analysed in stata )*
+
+. duplicates report provider_doctorid
+
+Duplicates in terms of provider_doctorid
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+
+Copies \| Observations Surplus
+
+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+
+1 \| 774 0
+
+2 \| 176 88
+
+3 \| 438 292
+
+277 \| 277 276
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+
+Version1 Not repeated provider in SP cases (N=1009)
+
+```{r}
+
+source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3_no_repeated.R)
+
+```
+
+Version2 Contains repeated provider in SP cases (same as Stanford) (N=1665)
+
+```{r}
+
+source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3.R')
+
+```
+
+Table 3
+
+```{r}
+
+source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable4.R')
+
+```
+
+Table 4
+
+```{r}
+
+source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable5.R')
+```

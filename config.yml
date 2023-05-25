@@ -12,4 +12,4 @@
 #   https://cran.r-project.org/web/packages/config/vignettes/introduction.html.
 default:
   path:
-    rawdata: "~/data-raw"
+    rawdata: "/Users/songshuyi/Documents/GitHub/SP-Meta-analysis/data-raw"
