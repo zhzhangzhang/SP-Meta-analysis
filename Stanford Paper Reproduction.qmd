@@ -15,11 +15,11 @@ config$path$rawdata
 
 Table 1
 
-![](images/Screenshot%202023-05-25%20at%2020.07.58-01.png){fig-align="left"}
+![](sandbox/images/Screenshot%202023-05-25%20at%2020.07.58-01.png)
 
 Table 2
 
-![](images/Screenshot%202023-05-25%20at%2020.08.14.png){fig-align="left"}
+![](sandbox/images/Screenshot%202023-05-25%20at%2020.08.14.png)
 
 Table 3 (two version)
 
@@ -55,6 +55,8 @@ source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3_no_repeated.R)
 
 ```
 
+<file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3_no_repeated.html>
+
 Version2 Contains repeated provider in SP cases (same as Stanford) (N=1665)
 
 ```{r}
@@ -63,7 +65,9 @@ source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3.R')
 
 ```
 
-Table 3
+<file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3.html>
+
+Table 4
 
 ```{r}
 
@@ -71,9 +75,25 @@ source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable4.R')
 
 ```
 
-Table 4
+<file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable4.html>
+
+Table 5
 
 ```{r}
 
 source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable5.R')
+```
+
+<file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable5.html>
+
+Table 6
+
+```{r}
+
+```
+
+Table 7
+
+```{r}
+
 ```
