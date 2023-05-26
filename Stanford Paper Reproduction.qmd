@@ -90,10 +90,11 @@ Table 6
 
 ```{r}
 
+# stata
 ```
 
 Table 7
 
 ```{r}
-
+# stata
 ```

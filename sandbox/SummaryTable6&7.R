@@ -8,12 +8,14 @@ sp_all_df$sp_clinics_level <- ifelse(sp_all_df$survey_clinics_level==1, "Rural",
                                             ifelse(sp_all_df$survey_clinics_level==3, "County",
                                                    ifelse(sp_all_df$survey_clinics_level==4, "Migrant",
                                                           ifelse(sp_all_df$survey_clinics_level==5, "CHC", "Online")))))
+
 sp_all_df$rural <- ifelse((sp_all_df$survey_clinics_level ==1 | sp_all_df$survey_clinics_level ==2),1, 0)
 sp_all_df$county <- ifelse((sp_all_df$survey_clinics_level ==3),1,0)
 sp_all_df$migrant <- ifelse((sp_all_df$survey_clinics_level ==4),1,0)
 sp_all_df$city <- ifelse((sp_all_df$survey_clinics_level ==5),1,0)
 sp_all_df$online <- ifelse((sp_all_df$survey_clinics_level ==6),1,0)
 
+library(labelled)
 remove_val_labels("provider_male")
 
 # Physician characteristics
@@ -44,7 +46,7 @@ sp_all_df$fee_all <- ifelse(sp_all_df$survey_project == 1,
                             rowSums(sp_all_df[,c("case1_clinfee", "case2_clinfee", "case3_clinfee", "case4_clinfee")], na.rm=TRUE),
                             sp_all_df$fee_all)
 
-sp_all_df$ln_totfees <- log1p(fee_all)
+ sp_all_df$ln_totfees <- log1p(sp_all_df$fee_all)
 sp_all_df$correct_diagnosis <- rowSums(sp_all_df[,c("case1_corrdiag", "case2_corrdiag", "case3_corrdiag", "case4_corrdiag")], na.rm=TRUE)
 
 sp_all_df$referred_patients <- rowSums(sp_all_df[,c("case1_refer", "case2_refer", "case3_refer", "case4_refer")], na.rm=TRUE)
@@ -72,49 +74,39 @@ sp_all_df$correct_management <- ifelse((sp_all_df$disease_type=="TB" |
                                                                                             sp_all_df$disease_type=="Bacterial Diarrhea") &
                                                                                            (sp_all_df$correct_treatment==1 |
                                                                                               sp_all_df$correct_medications==1), 1, 0))
-sp_all_df$ln_totfees <- log1p(fee_all)
 
+
+lm(ln_totfees ~ county + migrant + city + online, data = sp_all_df)
 lm(proportions_recommended ~ county + migrant + city + online, data = sp_all_df)
+glm(correct_diagnosis ~ county + migrant + city + online, data = sp_all_df)
+glm(correct_management ~ county + migrant + city + online, data = sp_all_df)
+glm(referred_patients ~ county + migrant + city + online, data = sp_all_df)
+glm(medications_prescribed ~ county + migrant + city + online, data = sp_all_df)
+glm(correct_medications ~ county + migrant + city + online, data = sp_all_df)
+glm(antibiotics_prescribed ~ county + migrant + city + online, data = sp_all_df)
 
-fixed.dum <-lm(proportions_recommended ~ county + migrant + city + online + factor(disease_type) - 1, data = sp_all_df)
+
+
+fixed.dum <-lm(ln_totfees ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
 summary(fixed.dum)
 
-lm(correct_diagnosis ~ county + migrant + city + online, data = sp_all_df)
-lm(correct_management ~ county + migrant + city + online, data = sp_all_df)
-lm(referred_patients ~ county + migrant + city + online, data = sp_all_df)
-lm(medications_prescribed ~ county + migrant + city + online, data = sp_all_df)
-lm(correct_medications ~ county + migrant + city + online, data = sp_all_df)
-lm(proportions_recommended ~ county + migrant + city + online, data = sp_all_df)
-lm(antibiotics_prescribed ~ county + migrant + city + online, data = sp_all_df)
+fixed.dum <-lm(proportions_recommended ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
+
+fixed.dum <-glm(correct_diagnosis ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
+
+fixed.dum <-glm(correct_management ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
+
+fixed.dum <-glm(referred_patients ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
+
+fixed.dum <-glm(medications_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
+
+fixed.dum <-glm(antibiotics_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
+summary(fixed.dum)
 
 
-library(gtsummary)
-library("dplyr")
-new_var <- sp_all_df %>% select(fee_all, proportions_recommended, sp_clinics_level, correct_diagnosis, correct_management, referred_patients, medications_prescribed, correct_medications, antibiotics_prescribed, disease_type)
-
-new_var %>% tbl_strata(
-  strata = disease_type,
-  ~.x %>%
-    tbl_summary(by = sp_clinics_level,
-                statistic = list(all_continuous() ~ "{mean} ({sd})"),
-                digits = all_continuous() ~ 3, type = list(correct_diagnosis ~ 'continuous',
-                                                           correct_management ~ 'continuous',
-                                                           referred_patients ~ 'continuous',
-                                                           medications_prescribed ~ 'continuous',
-                                                           correct_medications ~ 'continuous',
-                                                           antibiotics_prescribed ~ 'continuous'),
-                label = list(
-                  fee_all ~ "Fees (Chinese Yuan)",
-                  proportions_recommended ~ "Proportion of recommended items",
-                  correct_diagnosis ~ "Correct diagnosis",
-                  correct_management ~ "Correct case management",
-                  referred_patients ~ "Referred patients",
-                  medications_prescribed ~ "Medications prescribed",
-                  correct_medications ~ "Correct medications, if any",
-                  antibiotics_prescribed ~ "Antibiotics prescribed, if any"
-                )) %>% modify_footnote(
-                  all_stat_cols() ~ "Notes: Mean (SD). Process quality for non-online providers are measured as the proportion of recommended questions and examinations.
-                                               Online process quality is measured as the proportion of recommended questions. Fees for non-online providers are fees of consultation and medicines combined. Fees for online platforms are consultation fees only."
-                ) %>% modify_caption("**Table 5. SP outcomes across three disease cases**")
-)
 
