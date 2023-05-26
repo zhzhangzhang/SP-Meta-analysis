@@ -63,6 +63,7 @@ Version2 Contains repeated provider in SP cases (same as Stanford) (N=1665)
 
 source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3.R')
 
+
 ```
 
 <file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable3.html>
@@ -86,15 +87,9 @@ source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable5.R')
 
 <file:///Users/songshuyi/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable5.html>
 
-Table 6
+Table 6 & 7
 
 ```{r}
 
-# stata
-```
-
-Table 7
-
-```{r}
-# stata
+source('~/Documents/GitHub/SP-Meta-analysis/sandbox/SummaryTable6&7.R')
 ```

@@ -76,37 +76,43 @@ sp_all_df$correct_management <- ifelse((sp_all_df$disease_type=="TB" |
                                                                                               sp_all_df$correct_medications==1), 1, 0))
 
 
-lm(ln_totfees ~ county + migrant + city + online, data = sp_all_df)
-lm(proportions_recommended ~ county + migrant + city + online, data = sp_all_df)
-glm(correct_diagnosis ~ county + migrant + city + online, data = sp_all_df)
-glm(correct_management ~ county + migrant + city + online, data = sp_all_df)
-glm(referred_patients ~ county + migrant + city + online, data = sp_all_df)
-glm(medications_prescribed ~ county + migrant + city + online, data = sp_all_df)
-glm(correct_medications ~ county + migrant + city + online, data = sp_all_df)
-glm(antibiotics_prescribed ~ county + migrant + city + online, data = sp_all_df)
+model_fee <-lm(ln_totfees ~ county + migrant + city + online, data = sp_all_df)
+model_proportions <-lm(proportions_recommended ~ county + migrant + city + online, data = sp_all_df)
+model_correct_diagnosis <- glm(correct_diagnosis ~ county + migrant + city + online, data = sp_all_df, family = binomial)
+model_correct_management <- glm(correct_management ~ county + migrant + city + online, data = sp_all_df, family = binomial)
+model_referred_patients <- glm(referred_patients ~ county + migrant + city + online, data = sp_all_df, family = binomial)
+model_medications_prescribed <-glm(medications_prescribed ~ county + migrant + city + online, data = sp_all_df, family = binomial)
+model_correct_medications <-glm(correct_medications ~ county + migrant + city + online, data = sp_all_df, family = binomial)
+model_antibiotics_prescribed <-glm(antibiotics_prescribed ~ county + migrant + city + online, data = sp_all_df, family = binomial)
 
 
+# load package
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
+tab_model(model_fee, model_proportions, model_correct_diagnosis, model_correct_management, model_referred_patients,  model_medications_prescribed, model_correct_medications, model_antibiotics_prescribed,
+          show.est = TRUE, string.est = "Estimate", show.se = TRUE, show.ci = FALSE, show.p = FALSE, show.r2 = FALSE, transform = NULL, p.style = "stars",
+          title = "Table 6. Correlation between SP outcomes and provider types", digits = 3)
 
-fixed.dum <-lm(ln_totfees ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
 
-fixed.dum <-lm(proportions_recommended ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_fee <-lm(ln_totfees ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
 
-fixed.dum <-glm(correct_diagnosis ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_proportions <-lm(proportions_recommended ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
 
-fixed.dum <-glm(correct_management ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_correct_diagnosis <-glm(correct_diagnosis ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
 
-fixed.dum <-glm(referred_patients ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_correct_management <-glm(correct_management ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
 
-fixed.dum <-glm(medications_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_referred_patients <-glm(referred_patients ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
 
-fixed.dum <-glm(antibiotics_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df)
-summary(fixed.dum)
+fixed.model_medications_prescribed <-glm(medications_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
 
+fixed.model_correct_medications <-glm(correct_medications ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
+
+fixed.model_antibiotics_prescribed <-glm(antibiotics_prescribed ~ provider_male+Physician_age_group2+Physician_age_group3+ Chief_physician_associate+ Attending_physician+ Resident_physician+ Assistant_practicing_physician+ Rural_physician+ Others + factor(survey_disease_type) - 1, data = sp_all_df, family = binomial)
+
+tab_model(fixed.model_fee, fixed.model_proportions, fixed.model_correct_diagnosis, fixed.model_correct_management, fixed.model_referred_patients,  fixed.model_medications_prescribed, fixed.model_correct_medications, fixed.model_antibiotics_prescribed,
+          show.est = TRUE, string.est = "Estimate", show.se = TRUE, show.ci = FALSE, show.p = FALSE, show.r2 = FALSE, transform = NULL, p.style = "stars",
+          title = "Table 7. Correlation between SP outcomes and physician characteristics", digits = 3)
 
 
